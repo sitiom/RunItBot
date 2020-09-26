@@ -1,0 +1,3 @@
+﻿prefix: '|>' # Replace with your own default prefix
+tokens:
+    discord: '' # Enter your discord token here
