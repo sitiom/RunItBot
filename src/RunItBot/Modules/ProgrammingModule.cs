@@ -8,7 +8,7 @@ using F23.StringSimilarity;
 using Microsoft.Extensions.Configuration;
 using TioSharp;
 
-namespace RunIt.Modules
+namespace RunItBot.Modules
 {
 	[Name("Coding"), Summary("Code and compile your program.")]
 	public class CodingModule : ModuleBase<SocketCommandContext>

@@ -5,7 +5,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace RunIt.Services
+namespace RunItBot.Services
 {
     public class LoggingService
     {

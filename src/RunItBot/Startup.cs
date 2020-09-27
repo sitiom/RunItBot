@@ -6,9 +6,9 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RunIt.Services;
+using RunItBot.Services;
 
-namespace RunIt
+namespace RunItBot
 {
     public class Startup
     {

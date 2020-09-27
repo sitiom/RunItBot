@@ -4,7 +4,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 
-namespace RunIt.Services
+namespace RunItBot.Services
 {
 	public class CommandHandler
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace RunIt
+namespace RunItBot
 {
     class Program
     {

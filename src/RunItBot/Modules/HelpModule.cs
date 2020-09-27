@@ -4,7 +4,7 @@ using Discord;
 using Discord.Commands;
 using Microsoft.Extensions.Configuration;
 
-namespace RunIt.Modules
+namespace RunItBot.Modules
 {
 	[Name("Help"), Summary("Get some help")]
 	public class HelpModule : ModuleBase<SocketCommandContext>
