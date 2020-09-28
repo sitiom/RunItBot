@@ -101,7 +101,7 @@ __Usage__
 			{
 				if (file.Size > 20000)
 				{
-					await ReplyAsync("File must be smaller than 20 kio.");
+					await ReplyAsync("File must be smaller than 20 kio");
 					return;
 				}
 				StringReader stringReader = new StringReader(message);
@@ -116,6 +116,11 @@ __Usage__
 
 				language = subArgs1[0];
 				code = await new WebClient().DownloadStringTaskAsync(file.Url);
+				if (code.Length > 20000)
+				{
+					await ReplyAsync("Code must be shorter than 20,000 characters");
+					return;
+				}
 			}
 			else
 			{
