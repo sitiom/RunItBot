@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using F23.StringSimilarity;
 using Microsoft.Extensions.Configuration;
@@ -70,22 +72,65 @@ __Usage__
 [`input <input>`...]
 [`compiler-flags <flag>`...]
 [`command-line-options <option>`...]
-[`args <arg>`...]")]
+[`args <arg>`...]
+
+**Or,**
+
+|>run <language> [--stats]
+[`input <input>`...]
+[`compiler-flags <flag>`...]
+[`command-line-options <option>`...]
+[`args <arg>`...]
+
+`<attachment not exceeding 20 kio>`")]
 		public async Task RunCode([Remainder][Summary("The message to parse.")] string message)
 		{
-			string[] args = message.Split("```");
+			string[] args;
+			string[] subArgs1;
 
-			string language = await new StringReader(args[1]).ReadLineAsync();
-			string code = string.Join(Environment.NewLine, args[1].Split(Environment.NewLine.ToCharArray())
-				.Skip(1)
-				.ToArray());
+			string language;
+			string code;
 
 			List<string> inputs = new List<string>();
 			List<string> compilerFlags = new List<string>();
 			List<string> commandLineOptions = new List<string>();
 			List<string> arguments = new List<string>();
 
-			foreach (string line in args[2].Split(Environment.NewLine.ToCharArray()).Where(s => !string.IsNullOrWhiteSpace(s)))
+			Attachment file = Context.Message.Attachments.ElementAtOrDefault(0);
+			if (file != null)
+			{
+				if (file.Size > 20000)
+				{
+					await ReplyAsync("File must be smaller than 20 kio.");
+					return;
+				}
+				StringReader stringReader = new StringReader(message);
+
+				args = new[]
+				{
+					await stringReader.ReadLineAsync(),
+					await stringReader.ReadToEndAsync()
+				};
+
+				subArgs1 = args[0].Split(' ');
+
+				language = subArgs1[0];
+				code = await new WebClient().DownloadStringTaskAsync(file.Url);
+			}
+			else
+			{
+				args = message.Split("```");
+
+				subArgs1 = args[0].Split(' '); // Should return an array of size 3
+
+				StringReader stringReader = new StringReader(args[1]);
+				language = await stringReader.ReadLineAsync();
+				code = await stringReader.ReadToEndAsync();
+			}
+
+			bool showStats = subArgs1.Contains("--stats");
+
+			foreach (string line in (file == null ? args[2] : args[1]).Split(Environment.NewLine.ToCharArray()).Where(s => !string.IsNullOrWhiteSpace(s)))
 			{
 				if (line.StartsWith("input "))
 				{
@@ -117,9 +162,9 @@ __Usage__
 			else if (Compiler.Languages.All(l => l != language))
 			{
 				var l = new JaroWinkler();
-				// Get first 10 matches with >89% similarity
+				// Get first 10 matches with >85% similarity
 				string matches = string.Join('\n',
-					Compiler.Languages.Where(c => l.Similarity(language, c) > .89).Take(10));
+					Compiler.Languages.Where(c => l.Similarity(language, c) > .85).Take(10));
 				Console.WriteLine(args[0]);
 				string matchesReply = $"`{language}` not available.\n\n";
 				if (!string.IsNullOrWhiteSpace(matches))
@@ -136,8 +181,7 @@ __Usage__
 			string response = await Compiler.SendAsync(requestData);
 
 			string result;
-			//check if --stats flag is passed
-			if (args[0].Contains("--stats"))
+			if (showStats)
 			{
 				result = $"```\n{response}\n```";
 			}
@@ -146,8 +190,8 @@ __Usage__
 				// Parse Response
 				string[] lines = response.Split(Environment.NewLine.ToCharArray());
 				string output = string.Join(Environment.NewLine, lines
-					.SkipLast(5)) + '\n' + lines.TakeLast(1).ElementAt(0);
-				result = $"```{language}\n{output}\n```";
+					.SkipLast(5)) + Environment.NewLine + lines.TakeLast(1).ElementAt(0);
+				result = $"```\n{output}\n```";
 			}
 
 			await ReplyAsync(result);
