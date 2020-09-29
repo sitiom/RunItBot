@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
@@ -49,6 +50,7 @@ namespace RunItBot
                 DefaultRunMode = RunMode.Async,     // Force all commands to run async by default
             }))
             .AddSingleton<CommandHandler>()         // Add the command handler to the collection
+            .AddSingleton<InteractiveService>()
             .AddSingleton<StartupService>()         // Add StartupService to the collection
             .AddSingleton<LoggingService>()         // Add StartupService to the collection
             .AddSingleton<Random>()                 // Add random to the collection

@@ -5,15 +5,17 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
 using F23.StringSimilarity;
 using Microsoft.Extensions.Configuration;
+using RunItBot.Utils.Callbacks;
 using TioSharp;
 
 namespace RunItBot.Modules
 {
 	[Name("Coding"), Summary("Code and compile your program.")]
-	public class CodingModule : ModuleBase<SocketCommandContext>
+	public class CodingModule : InteractiveBase
 	{
 		private static readonly TioApi Compiler = new TioApi();
 		private readonly IConfigurationRoot _config;
@@ -59,9 +61,8 @@ namespace RunItBot.Modules
 		};
 
 		public CodingModule(IConfigurationRoot config)
-		{
-			_config = config;
-		}
+			=> _config = config;
+
 
 		[Command("run"), Summary(@"Run the specified code.
 __Usage__
@@ -199,7 +200,34 @@ __Usage__
 				result = $"```\n{output}\n```";
 			}
 
-			await ReplyAsync(result);
+			WasteBasketReactionCallback callback = new WasteBasketReactionCallback(Interactive, Context, await ReplyAsync(result), TimeSpan.FromMinutes(1));
+			await callback.StartAsync();
+		}
+
+		[Command("lang", RunMode = RunMode.Async), Summary(@"Returns a list of available languages from tio.run")]
+		public async Task ListLanguages()
+		{
+			PaginatedMessage paginatedMessage = new PaginatedMessage
+			{
+				Title = "Languages List",
+				Color = new Color(55, 129, 255),
+				Pages = Compiler.Languages
+					.Select((s, i) => new { Value = s, Index = i })
+					.GroupBy(x => x.Index / 10)
+					.Select(grp => string.Join('\n', grp.Select(x => x.Value)))
+					.ToArray(),
+				Options = new PaginatedAppearanceOptions { DisplayInformationIcon = false, Timeout = TimeSpan.FromMinutes(5) },
+				Author = new EmbedAuthorBuilder
+				{
+					IconUrl = "https://raw.githubusercontent.com/TryItOnline/tryitonline/master/usr/share/tio.run/mstile-310x310.png",
+					Name = "tio.run",
+					Url = "http://tio.run/"
+				}
+			};
+
+			await PagedReplyAsync(paginatedMessage);
+
+			await Compiler.RefreshLanguagesAsync();
 		}
 	}
 }
