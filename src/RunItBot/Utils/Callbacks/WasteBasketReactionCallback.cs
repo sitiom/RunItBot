@@ -39,14 +39,16 @@ namespace RunItBot.Utils.Callbacks
 				await Task.Delay(Timeout.Value);
 
 				Interactive.RemoveReactionCallback(Message);
-				await Message.RemoveAllReactionsAsync(RequestOptions.Default);
+				await Message.RemoveReactionAsync(new Emoji("🗑"), Context.Client.CurrentUser);
 			}
 		}
 
 		// true if we should stop listening, else false
 		public async Task<bool> HandleCallbackAsync(SocketReaction reaction)
 		{
-			if (reaction.Emote.Name == "🗑" && reaction.UserId == Context.User.Id)
+			if (reaction.Emote.Name != "🗑") return false;
+
+			if (reaction.UserId == Context.User.Id)
 			{
 				await Message.DeleteAsync().ConfigureAwait(false);
 				return true;
