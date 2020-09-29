@@ -112,7 +112,7 @@ __Usage__
 					await stringReader.ReadToEndAsync()
 				};
 
-				subArgs1 = args[0].Split(' ');
+				subArgs1 = args[0].Split(' ', '\r', '\n');
 
 				language = subArgs1[0];
 				code = await new WebClient().DownloadStringTaskAsync(file.Url);
@@ -126,7 +126,7 @@ __Usage__
 			{
 				args = message.Split("```");
 
-				subArgs1 = args[0].Split(' '); // Should return an array of size 3
+				subArgs1 = args[0].Split(' ', '\r', '\n'); // Should return an array of size 3
 
 				StringReader stringReader = new StringReader(args[1]);
 				language = await stringReader.ReadLineAsync();
@@ -135,7 +135,7 @@ __Usage__
 
 			bool showStats = subArgs1.Contains("--stats");
 
-			foreach (string line in (file == null ? args[2] : args[1]).Split(Environment.NewLine.ToCharArray()).Where(s => !string.IsNullOrWhiteSpace(s)))
+			foreach (string line in (file == null ? args[2] : args[1]).Split('\r', '\n').Where(s => !string.IsNullOrWhiteSpace(s)))
 			{
 				if (line.StartsWith("input "))
 				{
@@ -193,9 +193,9 @@ __Usage__
 			else
 			{
 				// Parse Response
-				string[] lines = response.Split(Environment.NewLine.ToCharArray());
-				string output = string.Join(Environment.NewLine, lines
-					.SkipLast(5)) + Environment.NewLine + lines.TakeLast(1).ElementAt(0);
+				string[] lines = response.Split('\r', '\n');
+				string output = string.Join('\n', lines
+					.SkipLast(5)) + '\n' + lines.TakeLast(1).ElementAt(0);
 				result = $"```\n{output}\n```";
 			}
 
