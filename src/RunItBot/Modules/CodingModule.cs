@@ -105,13 +105,15 @@ __Usage__
 					await ReplyAsync("File must be smaller than 20 kio");
 					return;
 				}
-				StringReader stringReader = new StringReader(message);
-
-				args = new[]
+				
+				using (StringReader stringReader = new StringReader(message))
 				{
-					await stringReader.ReadLineAsync(),
-					await stringReader.ReadToEndAsync()
-				};
+					args = new[]
+					{
+						await stringReader.ReadLineAsync(),
+						await stringReader.ReadToEndAsync()
+					};
+				}
 
 				subArgs1 = args[0].Split(' ', '\r', '\n');
 
@@ -129,7 +131,7 @@ __Usage__
 
 				subArgs1 = args[0].Split(' ', '\r', '\n'); // Should return an array of size 3
 
-				StringReader stringReader = new StringReader(args[1]);
+				using StringReader stringReader = new StringReader(args[1]);
 				language = await stringReader.ReadLineAsync();
 				code = await stringReader.ReadToEndAsync();
 			}
