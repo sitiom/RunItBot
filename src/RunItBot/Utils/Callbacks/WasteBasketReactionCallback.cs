@@ -54,7 +54,7 @@ namespace RunItBot.Utils.Callbacks
 				return true;
 			}
 
-			_ = Message.RemoveReactionAsync(reaction.Emote, reaction.User.Value);
+			await Message.RemoveReactionAsync(reaction.Emote, reaction.User.Value).ConfigureAwait(false);
 			return false;
 		}
 	}

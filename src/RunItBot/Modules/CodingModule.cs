@@ -200,8 +200,7 @@ __Usage__
 				result = $"```\n{output}\n```";
 			}
 
-			WasteBasketReactionCallback callback = new WasteBasketReactionCallback(Interactive, Context, await ReplyAsync(result), TimeSpan.FromMinutes(1));
-			await callback.StartAsync();
+			await new WasteBasketReactionCallback(Interactive, Context, await ReplyAsync(result), TimeSpan.FromMinutes(1)).StartAsync();
 		}
 
 		[Command("lang", RunMode = RunMode.Async), Summary(@"Returns a list of available languages from tio.run")]
