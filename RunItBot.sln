@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RunItBot", "src\RunItBot\RunItBot.csproj", "{1641E37E-9826-43AC-A1A9-5B7D5E5768D1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TioSharp", "src\TioSharp\TioSharp\TioSharp.csproj", "{991CEA19-A122-468C-88E4-50112997299B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TioSharp", "src\TioSharp\TioSharp.csproj", "{907D7E5E-848D-4578-AB43-6342A5D0C21A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{1641E37E-9826-43AC-A1A9-5B7D5E5768D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1641E37E-9826-43AC-A1A9-5B7D5E5768D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1641E37E-9826-43AC-A1A9-5B7D5E5768D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{991CEA19-A122-468C-88E4-50112997299B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{991CEA19-A122-468C-88E4-50112997299B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{991CEA19-A122-468C-88E4-50112997299B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{991CEA19-A122-468C-88E4-50112997299B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{907D7E5E-848D-4578-AB43-6342A5D0C21A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{907D7E5E-848D-4578-AB43-6342A5D0C21A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{907D7E5E-848D-4578-AB43-6342A5D0C21A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{907D7E5E-848D-4578-AB43-6342A5D0C21A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

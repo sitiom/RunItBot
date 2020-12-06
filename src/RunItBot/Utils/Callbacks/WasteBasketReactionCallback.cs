@@ -18,7 +18,6 @@ namespace RunItBot.Utils.Callbacks
 
 		public TimeSpan? Timeout { get; }
 
-
 		public WasteBasketReactionCallback(InteractiveService interactive,
 			SocketCommandContext sourceContext, IUserMessage message, TimeSpan? timeout = null)
 		{

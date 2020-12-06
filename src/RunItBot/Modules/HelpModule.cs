@@ -35,13 +35,13 @@ namespace RunItBot.Modules
 				for (var i = 0; i < module.Commands.Count; i++)
 				{
 					CommandInfo cmd = module.Commands[i];
-					if (cmd.Name != module.Commands.ElementAtOrDefault(i - 1)?.Name)
-					{
-						PreconditionResult result = await cmd.CheckPreconditionsAsync(Context);
-						if (result.IsSuccess)
-							description += $"{prefix}{cmd.Name}\n";
-					}
-				}
+
+                    if (cmd.Name == module.Commands.ElementAtOrDefault(i - 1)?.Name) continue;
+
+                    PreconditionResult result = await cmd.CheckPreconditionsAsync(Context);
+                    if (result.IsSuccess)
+                        description += $"{prefix}{cmd.Name}\n";
+                }
 
 				if (!string.IsNullOrWhiteSpace(description))
 				{
@@ -85,16 +85,15 @@ namespace RunItBot.Modules
 					Value = string.IsNullOrWhiteSpace(cmd.Summary) ? "*No description provided.*" : cmd.Summary
 				});
 
-				if (cmd.Parameters.Count != 0)
-				{
-					string arguments = cmd.Parameters.Aggregate(string.Empty, (current, parameter) => current + '`' + (parameter.IsMultiple ? $"[{parameter}...]" : $"<{parameter}>") + $": {parameter.Type.Name}`: {(string.IsNullOrWhiteSpace(parameter.Summary) ? "*No description provided.*" : parameter.Summary)}\n");
-					builder.AddField(new EmbedFieldBuilder
-					{
-						Name = "__Arguments__",
-						Value = string.IsNullOrWhiteSpace(arguments) ? "*No description provided.*" : $"{arguments}\n"
-					});
-				}
-			}
+                if (cmd.Parameters.Count == 0) continue;
+
+                string arguments = cmd.Parameters.Aggregate(string.Empty, (current, parameter) => current + '`' + (parameter.IsMultiple ? $"[{parameter}...]" : $"<{parameter}>") + $": {parameter.Type.Name}`: {(string.IsNullOrWhiteSpace(parameter.Summary) ? "*No description provided.*" : parameter.Summary)}\n");
+                builder.AddField(new EmbedFieldBuilder
+                {
+                    Name = "__Arguments__",
+                    Value = string.IsNullOrWhiteSpace(arguments) ? "*No description provided.*" : $"{arguments}\n"
+                });
+            }
 
 			await ReplyAsync("", false, builder.Build());
 		}

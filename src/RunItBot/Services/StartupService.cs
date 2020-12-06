@@ -8,36 +8,27 @@ using Microsoft.Extensions.Configuration;
 
 namespace RunItBot.Services
 {
-	public class StartupService
-	{
-		private readonly IServiceProvider _provider;
-		private readonly DiscordSocketClient _discord;
-		private readonly CommandService _commands;
-		private readonly IConfigurationRoot _config;
+    public class StartupService
+    {
+        private readonly IServiceProvider _provider;
+        private readonly DiscordSocketClient _discord;
+        private readonly CommandService _commands;
+        private readonly IConfigurationRoot _config;
 
-		// DiscordSocketClient, CommandService, and IConfigurationRoot are injected automatically from the IServiceProvider
-		public StartupService(
-			IServiceProvider provider,
-			DiscordSocketClient discord,
-			CommandService commands,
-			IConfigurationRoot config)
-		{
-			_provider = provider;
-			_config = config;
-			_discord = discord;
-			_commands = commands;
-		}
+        public StartupService(IServiceProvider provider, DiscordSocketClient discord, CommandService commands, IConfigurationRoot config)
+        {
+            _provider = provider;
+            _config = config;
+            _discord = discord;
+            _commands = commands;
+        }
 
-		public async Task StartAsync()
-		{
-			string discordToken = _config["tokens:discord"];     // Get the discord token from the config file
-			if (string.IsNullOrWhiteSpace(discordToken))
-				throw new Exception("Please enter your bot's token into the 'config.yaml' file found in the applications root directory.");
-
-			await _discord.LoginAsync(TokenType.Bot, discordToken);     // Login to discord
-			await _discord.StartAsync();                                // Connect to the websocket
-			await _discord.SetGameAsync($"{_config["prefix"]}help", null, ActivityType.Listening);
-			await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _provider); // Load commands and modules into the command service
-		}
-	}
+        public async Task StartAsync()
+        {
+            await _discord.LoginAsync(TokenType.Bot, _config["BOT_TOKEN"]);
+            await _discord.StartAsync();
+            await _discord.SetGameAsync($"{_config["BOT_PREFIX"]}help", null, ActivityType.Listening);
+            await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);
+        }
+    }
 }
